@@ -18,18 +18,23 @@ const pool = new Pool({
 });
 
 // Initialize database table if it doesn't exist
-const initDb = async () => {
-  try {
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS items (
-        id SERIAL PRIMARY KEY,
-        content TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-    console.log('Database initialized');
-  } catch (err) {
-    console.error('Error initializing database', err);
+const initDb = async (retries = 5) => {
+  while (retries) {
+    try {
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS items (
+          id SERIAL PRIMARY KEY,
+          content TEXT NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+      console.log('Database initialized');
+      break;
+    } catch (err) {
+      console.error('Error initializing database, retrying...', err);
+      retries -= 1;
+      await new Promise(res => setTimeout(res, 2000));
+    }
   }
 };
 initDb();

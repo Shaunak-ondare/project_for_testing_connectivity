@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Server, Database, DatabaseZap, CheckCircle2, XCircle, Loader2 } from 'lucide-react';
 import './index.css';
 
-const API_BASE = 'http://localhost:3000/api';
+const API_BASE = '/api';
 
 function App() {
   const [activeTab, setActiveTab] = useState('backend');
