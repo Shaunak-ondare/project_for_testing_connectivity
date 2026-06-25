@@ -12,6 +12,28 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+  backend:
+    build: ./backend
+    container_name: threetier_backend
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DB_USER=user
+      - DB_PASSWORD=password
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=threetier
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    container_name: threetier_frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
 
 volumes:
   pgdata:
